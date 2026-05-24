@@ -11,7 +11,7 @@ Pick one of the three prompts below. Copy it. Paste it into the Claude panel in 
 **Best for:** anyone who makes decks. Which is all of you.
 
 ```
-Clone this repo: <REPO_URL>
+Clone this repo: https://github.com/paristennisbookingassistant-spec/insead-ai-claude-workshop
 
 Then read skills/frontend-slides/templates/templates/benedict-evans/README.md to understand the design system.
 
@@ -36,7 +36,7 @@ Once it's open, I want to be able to click any text to edit it, and use drag-mod
 **Best for:** anyone who hates clicking through Canvas.
 
 ```
-Clone this repo: <REPO_URL>
+Clone this repo: https://github.com/paristennisbookingassistant-spec/insead-ai-claude-workshop
 
 Then read starter-files/canvas-sync-tutorial.pdf — it's a tutorial written specifically for you (Claude) to follow.
 
@@ -61,7 +61,7 @@ When the skill is built, run a test sync of one course (MDM, course ID 9209) so 
 **Best for:** anyone who wants to see what's possible before committing to a track.
 
 ```
-Clone this repo: <REPO_URL>
+Clone this repo: https://github.com/paristennisbookingassistant-spec/insead-ai-claude-workshop
 
 Walk me through what's in it. What can I do with this? What's each file for? Show me 2-3 things I could try right now, in order of how impressive they'd look.
 ```
@@ -73,7 +73,7 @@ Walk me through what's in it. What can I do with this? What's each file for? Sho
 ## Tips for working with these prompts
 
 1. **Paste the whole prompt at once** — don't break it into pieces. Claude works better with the full context up front.
-2. **Replace `<REPO_URL>`** — the QR code on slide 24 points at the live URL. If you're reading this on the GitHub page, the URL is in your browser's address bar.
+2. **The repo URL is already filled in above** — paste the prompt as-is. The QR code on slide 24 opens this same page.
 3. **Answer Claude's questions** — Claude will pause and ask you things (where should X go? can I install Y?). These pauses aren't bugs; they're how Claude makes sure it doesn't do something you didn't want.
 4. **Iterate freely** — the first version is rarely the final one. "Make it shorter", "use a different color", "add a chart" — keep going until you like it.
 5. **When stuck, ask Claude** — "I'm not sure what you just did" or "why did you choose X?" works fine. Claude will explain.
