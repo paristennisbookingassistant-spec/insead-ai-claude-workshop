@@ -1,0 +1,29 @@
+# Environment + secrets
+.env
+.env.local
+*.env
+
+# Cookies and credential files
+*cookies*.json
+.canvas-state/
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor junk
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Node
+node_modules/
+package-lock.json

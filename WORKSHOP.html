@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Workshop · INSEAD AI Club Event 03</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;500;700&family=Inter:wght@400;500;600;700&family=Menlo&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0eee9;
+    --ink: #2a2a2a;
+    --ink-soft: #555;
+    --ink-faint: #999;
+    --accent: #e74c3c;
+    --rule: #cdcbc4;
+    --good: #2ecc71;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--ink); font-family: 'Roboto Slab', serif; }
+  body { line-height: 1.55; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 56px 32px 120px; }
+
+  header { margin-bottom: 28px; }
+  .eyebrow {
+    font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent);
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-family: 'Roboto Slab', serif; font-weight: 400;
+    font-size: 52px; line-height: 1.02; letter-spacing: -0.01em;
+    margin-bottom: 14px;
+  }
+  h1 strong { font-weight: 500; color: var(--accent); }
+  .lede {
+    font-family: 'Roboto Slab', serif; font-weight: 300;
+    font-size: 20px; line-height: 1.45; color: var(--ink-soft);
+    max-width: 640px;
+  }
+
+  .prereq {
+    background: rgba(46,204,113,0.08); border-left: 3px solid var(--good);
+    padding: 14px 20px; margin: 24px 0 36px;
+    font-family: 'Roboto Slab', serif; font-size: 15px;
+    border-radius: 0 4px 4px 0;
+  }
+  .prereq strong { color: var(--ink); font-weight: 500; }
+  .prereq a { color: var(--accent); border-bottom: 1px dotted var(--accent); text-decoration: none; }
+
+  /* ============ TRACK PICKER (3 big cards) ============ */
+  .picker-prompt {
+    font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-soft);
+    text-align: center; margin: 12px 0 18px;
+  }
+  .track-cards {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-bottom: 40px;
+  }
+  .track-card {
+    cursor: pointer;
+    padding: 26px 24px 22px;
+    background: #fff;
+    border: 1.5px solid var(--rule);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+    transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    position: relative;
+    text-align: left;
+    font-family: inherit;
+    color: inherit;
+  }
+  .track-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    box-shadow: 0 6px 18px rgba(231,76,60,0.12);
+  }
+  .track-card.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 0 6px 24px rgba(231,76,60,0.28);
+  }
+  .track-card.active .tc-letter,
+  .track-card.active .tc-title,
+  .track-card.active .tc-who,
+  .track-card.active .tc-time { color: #fff; }
+  .track-card.active .tc-who { color: rgba(255,255,255,0.85); }
+  .track-card.active .tc-time { color: rgba(255,255,255,0.7); }
+
+  .tc-letter {
+    font-family: 'Roboto Slab', serif; font-weight: 400;
+    font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .tc-title {
+    font-family: 'Roboto Slab', serif; font-weight: 500;
+    font-size: 20px; line-height: 1.15; color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .tc-who {
+    font-family: 'Roboto Slab', serif; font-style: italic;
+    font-size: 14px; line-height: 1.35; color: var(--ink-soft);
+    margin-bottom: 14px;
+  }
+  .tc-time {
+    font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600;
+    color: var(--ink-faint); letter-spacing: 0.06em;
+  }
+
+  /* ============ TRACK CONTENT (revealed area) ============ */
+  .track-content {
+    display: none;
+    animation: fadeIn 0.25s ease;
+  }
+  .track-content.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .content-header {
+    padding-top: 24px; border-top: 2px solid var(--accent);
+    margin-bottom: 22px;
+  }
+  .content-header .label {
+    font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .content-header h2 {
+    font-family: 'Roboto Slab', serif; font-weight: 500;
+    font-size: 32px; line-height: 1.1; color: var(--ink);
+  }
+
+  /* Prompt box */
+  .prompt-box {
+    position: relative;
+    background: #1a1a1a; color: #e9e9e9;
+    border-radius: 8px;
+    padding: 22px 26px 22px;
+    font-family: 'Menlo', 'Consolas', monospace;
+    font-size: 14px; line-height: 1.6;
+    margin: 14px 0 18px;
+    overflow-x: auto;
+    border: 1px solid #2a2a2a;
+  }
+  .prompt-box .prompt-bar {
+    position: absolute; top: 10px; right: 14px;
+    display: flex; gap: 8px; align-items: center;
+  }
+  .copy-btn {
+    background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.7);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 4px 10px; border-radius: 3px;
+    font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.06em; cursor: pointer; text-transform: uppercase;
+  }
+  .copy-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .copy-btn.copied { background: var(--good); color: #fff; border-color: var(--good); }
+  .prompt-box .prompt-prefix {
+    color: var(--accent); user-select: none;
+    margin-right: 8px;
+  }
+
+  .what-happens {
+    font-family: 'Roboto Slab', serif; font-size: 15px;
+    color: var(--ink); line-height: 1.5;
+    margin-bottom: 18px;
+    padding: 12px 16px;
+    background: rgba(231,76,60,0.05);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 4px 4px 0;
+  }
+  .what-happens strong { font-weight: 500; color: var(--accent); }
+
+  .try-next {
+    margin-top: 6px;
+    font-family: 'Inter', sans-serif; font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .try-next h4 {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .try-next ul { margin: 0; padding-left: 20px; }
+  .try-next li { margin-bottom: 6px; font-size: 14px; line-height: 1.4; }
+
+  /* Tips section */
+  h2.section-h {
+    font-family: 'Roboto Slab', serif; font-weight: 500;
+    font-size: 24px; color: var(--ink);
+    margin: 56px 0 18px;
+    padding-top: 24px; border-top: 1px solid var(--rule);
+  }
+  .tips ol { margin: 0 0 0 22px; }
+  .tips li {
+    margin-bottom: 12px; font-size: 16px;
+    line-height: 1.55;
+  }
+  .tips li strong { font-weight: 500; color: var(--ink); }
+
+  .fallback {
+    margin-top: 48px; padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    font-family: 'Roboto Slab', serif; font-size: 14px;
+    color: var(--ink-soft); line-height: 1.55;
+  }
+  .fallback a { color: var(--accent); border-bottom: 1px dotted var(--accent); text-decoration: none; }
+  .fallback strong { color: var(--ink); font-weight: 500; }
+
+  footer {
+    margin-top: 64px; padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    font-size: 13px; color: var(--ink-faint);
+  }
+
+  code {
+    font-family: 'Menlo', 'Consolas', monospace;
+    background: #2c2c2c; color: #f0eee9;
+    padding: 1px 6px; border-radius: 3px;
+    font-size: 12px;
+  }
+
+  .placeholder { color: #f1c232; font-weight: 500; }
+
+  @media (max-width: 720px) {
+    .track-cards { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">INSEAD AI Club · Event 03 · Tuesday Night</div>
+  <h1>The <strong>workshop.</strong></h1>
+  <p class="lede">Three master prompts. Pick one. Paste it into Claude. Claude does the rest — clones this repo, installs the skill, builds your thing.</p>
+  <div class="prereq">
+    <strong>Prerequisite:</strong> you've already installed Claude Code (Sunday or Monday). If not, start at <a href="INSTALL.html">INSTALL.html</a>.
+  </div>
+</header>
+
+<div class="picker-prompt">↓ Pick your track ↓</div>
+
+<div class="track-cards" role="tablist" aria-label="Workshop tracks">
+  <button class="track-card" role="tab" aria-controls="track-a" aria-selected="false" data-track="a">
+    <div class="tc-letter">Track A</div>
+    <div class="tc-title">Build an HTML slide.</div>
+    <div class="tc-who">For anyone who makes decks. Which is all of you.</div>
+    <div class="tc-time">~3 minutes to first slide</div>
+  </button>
+
+  <button class="track-card" role="tab" aria-controls="track-b" aria-selected="false" data-track="b">
+    <div class="tc-letter">Track B</div>
+    <div class="tc-title">Build your own Canvas sync.</div>
+    <div class="tc-who">For anyone who hates clicking through Canvas. Which is also all of you.</div>
+    <div class="tc-time">~10 minutes to first sync</div>
+  </button>
+
+  <button class="track-card" role="tab" aria-controls="track-c" aria-selected="false" data-track="c">
+    <div class="tc-letter">Track C</div>
+    <div class="tc-title">Just explore.</div>
+    <div class="tc-who">For anyone who wants to see what's in here before committing.</div>
+    <div class="tc-time">~1 minute, then choose</div>
+  </button>
+</div>
+
+<!-- ============ TRACK A CONTENT ============ -->
+<div class="track-content" id="track-a" role="tabpanel" aria-labelledby="track-a-tab">
+  <div class="content-header">
+    <div class="label">Track A · The prompt</div>
+    <h2>Build an Evans-style HTML slide.</h2>
+  </div>
+
+  <div class="prompt-box" id="prompt-a">
+    <div class="prompt-bar"><button class="copy-btn" data-target="prompt-a">Copy</button></div>
+<div><span class="prompt-prefix">&gt;</span>Clone this repo: <span class="placeholder">&lt;REPO_URL&gt;</span></div>
+<div>&nbsp;</div>
+<div>Then read skills/frontend-slides/templates/templates/benedict-evans/README.md</div>
+<div>to understand the design system.</div>
+<div>&nbsp;</div>
+<div>Install the frontend-slides skill by copying skills/frontend-slides/</div>
+<div>into my ~/.claude/skills/ folder.</div>
+<div>&nbsp;</div>
+<div>Then build me a single Evans-style HTML slide explaining the BCG</div>
+<div>growth-share matrix. 1280x720. Open it in my browser when done.</div>
+<div>&nbsp;</div>
+<div>Once it's open, I want to be able to click any text to edit it,</div>
+<div>and use drag-mode to rearrange elements.</div>
+  </div>
+
+  <div class="what-happens">
+    <strong>What happens.</strong> Claude clones the repo, installs the skill, reads the Evans design system, generates one polished slide, opens it in your browser. ~90 seconds end-to-end.
+  </div>
+
+  <div class="try-next">
+    <h4>Try next</h4>
+    <ul>
+      <li>Swap "BCG growth-share matrix" for any business concept (Porter 5 Forces, prospect theory, jobs-to-be-done, the 4Ps)</li>
+      <li>"Turn the slide above into a 5-slide deck on the same topic"</li>
+      <li>"Convert this memo into slides: &lt;paste memo&gt;"</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ TRACK B CONTENT ============ -->
+<div class="track-content" id="track-b" role="tabpanel" aria-labelledby="track-b-tab">
+  <div class="content-header">
+    <div class="label">Track B · The prompt</div>
+    <h2>Build your own /canvas-sync skill.</h2>
+  </div>
+
+  <div class="prompt-box" id="prompt-b">
+    <div class="prompt-bar"><button class="copy-btn" data-target="prompt-b">Copy</button></div>
+<div><span class="prompt-prefix">&gt;</span>Clone this repo: <span class="placeholder">&lt;REPO_URL&gt;</span></div>
+<div>&nbsp;</div>
+<div>Then read starter-files/canvas-sync-tutorial.pdf, it's a tutorial</div>
+<div>written specifically for you (Claude) to follow.</div>
+<div>&nbsp;</div>
+<div>Build me a /canvas-sync skill following the tutorial exactly.</div>
+<div>Install it at ~/.claude/skills/canvas-sync/.</div>
+<div>&nbsp;</div>
+<div>Before writing any file with credentials, ask me interactively</div>
+<div>for my INSEAD email, password, and where I want course materials</div>
+<div>saved. Never put placeholder passwords into files, wait for my</div>
+<div>real input.</div>
+<div>&nbsp;</div>
+<div>When the skill is built, run a test sync of one course (MDM,</div>
+<div>course ID 9209) so I can verify it works end-to-end.</div>
+  </div>
+
+  <div class="what-happens">
+    <strong>What happens.</strong> Claude reads the PDF, asks you a few clarifying questions (folder location, whether it can install Playwright, etc.), builds the entire skill, then runs a test sync. The skill becomes yours, you can modify it freely afterward.
+  </div>
+
+  <div class="try-next">
+    <h4>Try next</h4>
+    <ul>
+      <li>"Add a feature: write upcoming deadlines (next 14 days) to ~/INSEAD/deadlines.md after every sync"</li>
+      <li>"Add another course: &lt;CODE&gt; with Canvas ID &lt;ID&gt;"</li>
+      <li>"Set up a scheduled task that runs /canvas-sync every weekday morning at 7am"</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ TRACK C CONTENT ============ -->
+<div class="track-content" id="track-c" role="tabpanel" aria-labelledby="track-c-tab">
+  <div class="content-header">
+    <div class="label">Track C · The prompt</div>
+    <h2>Just explore.</h2>
+  </div>
+
+  <div class="prompt-box" id="prompt-c">
+    <div class="prompt-bar"><button class="copy-btn" data-target="prompt-c">Copy</button></div>
+<div><span class="prompt-prefix">&gt;</span>Clone this repo: <span class="placeholder">&lt;REPO_URL&gt;</span></div>
+<div>&nbsp;</div>
+<div>Walk me through what's in it. What can I do with this?</div>
+<div>What's each file for? Show me 2-3 things I could try right</div>
+<div>now, in order of how impressive they'd look.</div>
+  </div>
+
+  <div class="what-happens">
+    <strong>What happens.</strong> Claude clones, surveys the structure, and gives you a personalized menu. Good if you want to pick a track based on what catches your eye.
+  </div>
+</div>
+
+<!-- ============ TIPS ============ -->
+<h2 class="section-h">Tips for working with these prompts</h2>
+<div class="tips">
+  <ol>
+    <li><strong>Paste the whole prompt at once.</strong> Don't break it into pieces. Claude works better with the full context up front.</li>
+    <li><strong>Replace <code>&lt;REPO_URL&gt;</code></strong> with the link from the QR code on slide 24. If you're reading this on the GitHub page, the URL is in your browser's address bar.</li>
+    <li><strong>Answer Claude's questions.</strong> Claude will pause and ask you things (where should X go? can I install Y?). These pauses aren't bugs — they're how Claude makes sure it doesn't do something you didn't want.</li>
+    <li><strong>Iterate freely.</strong> The first version is rarely the final one. "Make it shorter", "use a different color", "add a chart" — keep going until you like it.</li>
+    <li><strong>When stuck, ask Claude.</strong> "I'm not sure what you just did" or "why did you choose X?" works fine. Claude will explain.</li>
+  </ol>
+</div>
+
+<div class="fallback">
+  <p><strong>Want a step-by-step walkthrough instead?</strong> The master prompts above are the intended path, but if you'd rather run each command yourself, see the manual walkthroughs at <a href="tracks/manual/track-a-frontend-slides.md">tracks/manual/track-a-frontend-slides.md</a> and <a href="tracks/manual/track-b-canvas-tutorial.md">tracks/manual/track-b-canvas-tutorial.md</a>. Most people don't need these.</p>
+</div>
+
+<footer>
+  <p>INSEAD AI Club Event 03 · May 2026 · Liyang Guo (MBA26D)</p>
+</footer>
+
+</div>
+
+<script>
+  // ============ Track picker ============
+  const cards = document.querySelectorAll('.track-card');
+  const contents = document.querySelectorAll('.track-content');
+
+  function showTrack(letter) {
+    cards.forEach(c => {
+      const isActive = c.dataset.track === letter;
+      c.classList.toggle('active', isActive);
+      c.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    });
+    contents.forEach(p => {
+      p.classList.toggle('active', p.id === `track-${letter}`);
+    });
+    // Persist
+    try { localStorage.setItem('ws-track', letter); } catch (e) {}
+  }
+
+  cards.forEach(c => {
+    c.addEventListener('click', () => showTrack(c.dataset.track));
+    c.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); c.click(); }
+    });
+  });
+
+  // Restore last choice, default to A
+  let initial = 'a';
+  try {
+    const saved = localStorage.getItem('ws-track');
+    if (saved && ['a','b','c'].includes(saved)) initial = saved;
+  } catch (e) {}
+  showTrack(initial);
+
+  // ============ Copy buttons ============
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const id = btn.dataset.target;
+      const box = document.getElementById(id);
+      const lines = Array.from(box.querySelectorAll('div')).filter(d => !d.classList.contains('prompt-bar'));
+      const text = lines.map(d => {
+        const clone = d.cloneNode(true);
+        const pref = clone.querySelector('.prompt-prefix');
+        if (pref) pref.remove();
+        return clone.textContent.trim();
+      }).join('\n').replace(/\n{2,}/g, '\n\n');
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = 'Copied ✓';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1800);
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

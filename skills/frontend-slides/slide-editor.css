@@ -1,0 +1,94 @@
+/* ===========================================================
+   Slide Editor — visual editor for browser-rendered slide decks
+   Drop in alongside viewport-base.css. Pair with slide-editor.js.
+   Auto-injects: drag, resize, font-size, undo/redo, localStorage autosave.
+
+   Required HTML scaffolding (see slide-editor.js — it injects this if missing):
+     - .editor-toolbar (fixed at top-left)
+     - elements with class .slide marking each slide
+     - Optional: contenteditable="true" on any text element
+   =========================================================== */
+
+/* ---- contenteditable affordance ---- */
+[contenteditable="true"] { outline: none; }
+[contenteditable="true"]:hover { box-shadow: 0 0 0 1px rgba(231, 76, 60, 0.35); cursor: text; }
+[contenteditable="true"]:focus { box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.6); cursor: text; }
+/* white-outline variant for dark backgrounds — opt-in via .slide-dark on the parent slide */
+.slide-dark [contenteditable="true"]:hover,
+.slide-title [contenteditable="true"]:hover { box-shadow: 0 0 0 1px rgba(255,255,255,0.5); }
+.slide-dark [contenteditable="true"]:focus,
+.slide-title [contenteditable="true"]:focus { box-shadow: 0 0 0 2px rgba(255,255,255,0.85); }
+
+/* ---- editor toolbar ---- */
+.editor-toolbar {
+  position: fixed;
+  top: 12px; left: 12px;
+  z-index: 9999;
+  background: #2a2a2a;
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.editor-toolbar button {
+  background: #444; color: #fff; border: 1px solid #666;
+  padding: 4px 10px; border-radius: 4px; cursor: pointer;
+  font-family: inherit; font-size: 11px;
+}
+.editor-toolbar button.active { background: #e74c3c; border-color: #e74c3c; }
+.editor-toolbar button:hover { background: #555; }
+.editor-toolbar button:disabled { opacity: 0.4; cursor: not-allowed; }
+.editor-toolbar .hint { color: #aaa; }
+.editor-toolbar .font-group {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 0 6px; margin: 0 4px;
+  border-left: 1px solid #555; border-right: 1px solid #555;
+}
+.editor-toolbar .font-label { color: #aaa; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; margin-right: 4px; }
+.editor-toolbar .font-unit { color: #888; font-size: 10px; margin-left: 2px; }
+.editor-toolbar .font-input {
+  width: 52px;
+  background: #1f1f1f; color: #fff;
+  border: 1px solid #666; border-radius: 3px;
+  padding: 3px 6px; font-family: inherit; font-size: 12px;
+  text-align: center;
+}
+.editor-toolbar .font-input::-webkit-inner-spin-button { opacity: 0.5; }
+.editor-toolbar .autosave-status {
+  color: #888; font-size: 10px; letter-spacing: 0.04em;
+  padding: 0 6px;
+}
+.editor-toolbar .autosave-status.saved { color: #6dd47e; }
+.editor-toolbar .autosave-status.saving { color: #f5b454; }
+
+/* ---- selection + drag indicators ---- */
+.drag-selected {
+  outline: 2px dashed #e74c3c !important;
+  outline-offset: 2px;
+  cursor: move;
+}
+.drag-handle {
+  position: absolute;
+  width: 12px; height: 12px;
+  background: #e74c3c;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  z-index: 9998;
+  pointer-events: auto;
+}
+.drag-handle.br { cursor: nwse-resize; }
+body.drag-mode [contenteditable="true"] { pointer-events: none; }
+body.drag-mode .draggable { pointer-events: auto; }
+body.drag-mode .draggable:hover { outline: 1px dashed rgba(231, 76, 60, 0.5); cursor: move; }
+
+/* ---- print: strip editor UI completely ---- */
+@media print {
+  .editor-toolbar, .drag-handle, .drag-selected { display: none !important; outline: none !important; }
+  [contenteditable="true"]:hover,
+  [contenteditable="true"]:focus { box-shadow: none !important; }
+}

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{{DECK_TITLE}}</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Optional: live edit. Drop slide-editor.css/js into the same folder as this file. -->
+<link rel="stylesheet" href="../../../slide-editor.css">
+<style>
+  :root {
+    --bg:        #f0eee9;
+    --ink:       #3a3a3a;
+    --ink-soft:  #6d6d6d;
+    --ink-faint: #a8a8a8;
+    --accent:    #e74c3c;
+    --slate:     #3a4a52;
+    --rule:      #cdcbc4;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #1a1a1a; font-family: 'Roboto Slab', serif; color: var(--ink); }
+  body { padding: 40px 20px; display: flex; flex-direction: column; align-items: center; gap: 24px; }
+
+  /* ============ SLIDE FRAME (1280x720) ============ */
+  .slide {
+    width: 1280px; height: 720px;
+    background: var(--bg);
+    position: relative; overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    page-break-after: always; break-after: page;
+  }
+  .slide-dark { background: #0c0c0c; color: #fff; }
+
+  @page { size: 1280px 720px; margin: 0; }
+  @media print {
+    html, body { background: #fff !important; padding: 0 !important; margin: 0 !important; }
+    body { display: block !important; gap: 0 !important; }
+    .slide-label { display: none !important; }
+    .slide { width: 1280px !important; height: 720px !important; margin: 0 !important; box-shadow: none !important; }
+    .slide:last-of-type { page-break-after: auto; break-after: auto; }
+  }
+
+  /* ============ HEADER STRIP ============ */
+  .strip {
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 44px; display: flex; align-items: center;
+    padding: 0 56px;
+    font-family: 'Inter', sans-serif; font-size: 12px;
+    font-weight: 600; letter-spacing: 0.04em;
+    color: var(--ink-soft);
+  }
+  .strip .l { flex: 1; }
+  .strip .c { flex: 2; text-align: center; color: var(--ink-faint); font-weight: 500; }
+  .strip .r { flex: 1; text-align: right; color: var(--ink-faint); font-weight: 500; }
+  .slide-dark .strip { color: rgba(255,255,255,0.5); }
+
+  /* ============ FOOTER ============ */
+  .foot {
+    position: absolute; bottom: 24px; left: 56px; right: 56px;
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: 'Inter', sans-serif; font-size: 12px;
+    color: var(--ink-faint); font-weight: 500;
+  }
+  .foot .src { color: var(--ink-soft); }
+  .slide-dark .foot { color: rgba(255,255,255,0.4); }
+  .slide-dark .foot .src { color: rgba(255,255,255,0.55); }
+
+  /* ============ TYPOGRAPHY PRIMITIVES ============ */
+  h1.headline {
+    font-family: 'Roboto Slab', serif; font-weight: 400;
+    font-size: 56px; line-height: 1.08; letter-spacing: -0.005em;
+    color: var(--ink);
+  }
+  h1.headline strong { font-weight: 500; color: var(--accent); }
+  .slide-dark h1.headline { color: #fff; }
+  .subtitle {
+    font-family: 'Roboto Slab', serif; font-weight: 300;
+    font-size: 24px; color: var(--ink-soft);
+    line-height: 1.3; margin-top: 10px;
+    font-style: italic;
+  }
+  .slide-dark .subtitle { color: rgba(255,255,255,0.7); }
+  .body-wrap { position: absolute; top: 78px; left: 88px; right: 88px; bottom: 100px; }
+
+  /* ============ TITLE SLIDE (Evans-style full bleed) ============ */
+  .slide-title {
+    background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .title-block {
+    width: 84%; padding: 70px 90px 56px;
+    border-bottom: 1.5px solid rgba(255,255,255,0.92);
+    background: rgba(255,255,255,0.10);
+  }
+  .title-block h1 {
+    font-family: 'Roboto Slab', serif; font-weight: 400;
+    font-size: 96px; line-height: 1.0; color: #fff; letter-spacing: -0.01em;
+  }
+  .title-block .byline {
+    margin-top: 220px; font-family: 'Inter', sans-serif; color: #fff;
+  }
+  .title-block .byline .l1 { font-weight: 600; font-size: 18px; }
+  .title-block .byline .l2,
+  .title-block .byline .l3 { font-weight: 400; font-size: 16px; margin-top: 4px; opacity: 0.92; }
+
+  /* ============ COMMON LAYOUT HELPERS ============ */
+  /* Two-column comparison (e.g. before/after, A/B) */
+  .two-col {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 36px; margin-top: 50px;
+  }
+  .col {
+    padding: 28px 32px; border-top: 1px solid var(--rule); min-height: 280px;
+  }
+  .col.accent { background: rgba(231, 76, 60, 0.07); border-top: 2px solid var(--accent); }
+  .col .tag {
+    font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-soft);
+    margin-bottom: 16px;
+  }
+  .col.accent .tag { color: var(--accent); }
+
+  /* Three-card row (e.g. three companies, three options) */
+  .three-row {
+    margin-top: 50px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+  }
+  .card {
+    padding-top: 22px; border-top: 1px solid var(--rule);
+  }
+  .card.highlight { border-top: 2px solid var(--accent); }
+  .card .number {
+    font-family: 'Roboto Slab', serif; font-weight: 400;
+    font-size: 56px; line-height: 1; color: var(--accent);
+    margin-bottom: 14px;
+  }
+  .card .label {
+    font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-soft);
+    margin-bottom: 12px;
+  }
+  .card .desc {
+    font-family: 'Roboto Slab', serif; font-weight: 400;
+    font-size: 19px; line-height: 1.35; color: var(--ink);
+  }
+
+  /* Quote slide */
+  .quote-wrap {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    left: 88px; right: 88px;
+  }
+  .quote-eyebrow {
+    font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600;
+    letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent);
+    margin-bottom: 36px;
+  }
+  .quote-text {
+    font-family: 'Roboto Slab', serif; font-style: italic; font-weight: 400;
+    font-size: 52px; line-height: 1.18; color: var(--ink); max-width: 1050px;
+  }
+  .quote-text strong { font-weight: 500; color: var(--accent); font-style: normal; }
+  .quote-attr {
+    margin-top: 40px; padding-top: 22px; border-top: 1px solid var(--rule);
+    font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; color: var(--ink);
+  }
+  .quote-attr .role {
+    display: block; margin-top: 4px; font-weight: 400;
+    font-size: 12px; color: var(--ink-soft);
+  }
+
+  /* Closing / goal slide */
+  .goal-wrap {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    left: 88px; right: 88px;
+  }
+  .goal-eyebrow {
+    font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600;
+    letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent);
+    margin-bottom: 24px;
+  }
+  .goal-headline {
+    font-family: 'Roboto Slab', serif; font-weight: 400;
+    font-size: 64px; line-height: 1.1; color: var(--ink); max-width: 1000px;
+  }
+  .goal-headline strong { font-weight: 500; color: var(--accent); }
+
+  /* slide label (review only) */
+  .slide-label {
+    color: #888; font-family: 'Inter', sans-serif;
+    font-size: 13px; letter-spacing: 0.1em;
+    text-transform: uppercase; font-weight: 600;
+  }
+</style>
+</head>
+<body class="">
+
+<!-- ===================== TITLE SLIDE ===================== -->
+<div class="slide-label">1, Title</div>
+<div class="slide slide-title">
+  <div class="title-block">
+    <h1 contenteditable="true">{{DECK_TITLE}}</h1>
+    <div class="byline">
+      <div class="l1" contenteditable="true">{{DECK_SUBTITLE}}</div>
+      <div class="l2" contenteditable="true">{{DATE}}</div>
+      <div class="l3" contenteditable="true">{{AUTHOR}}</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SAMPLE: HEADLINE + SUBTITLE + THREE CARDS ===================== -->
+<div class="slide-label">2, Three things</div>
+<div class="slide">
+  <div class="strip"><div class="l"></div><div class="c"></div><div class="r"></div></div>
+  <div class="body-wrap">
+    <h1 class="headline" contenteditable="true">A headline. Sentence case. Ends with a period.</h1>
+    <div class="subtitle" contenteditable="true">A light, italic subtitle that adds context.</div>
+
+    <div class="three-row">
+      <div class="card">
+        <div class="number" contenteditable="true">01</div>
+        <div class="label" contenteditable="true">First idea</div>
+        <div class="desc" contenteditable="true">One sentence per card. Keep it tight. Don't fill the box just because it's there.</div>
+      </div>
+      <div class="card highlight">
+        <div class="number" contenteditable="true">02</div>
+        <div class="label" contenteditable="true">Second idea</div>
+        <div class="desc" contenteditable="true">The middle card has a coral top border so you can emphasize one without restyling everything.</div>
+      </div>
+      <div class="card">
+        <div class="number" contenteditable="true">03</div>
+        <div class="label" contenteditable="true">Third idea</div>
+        <div class="desc" contenteditable="true">Three cards is the sweet spot. Two feels thin, four feels crowded.</div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div class="src" contenteditable="true">Source: your source here</div>
+    <div><span class="pg">2</span></div>
+  </div>
+</div>
+
+<!-- ===================== SAMPLE: QUOTE SLIDE ===================== -->
+<div class="slide-label">3, Quote</div>
+<div class="slide">
+  <div class="strip"><div class="l"></div><div class="c"></div><div class="r"></div></div>
+  <div class="quote-wrap">
+    <div class="quote-eyebrow" contenteditable="true">WHO SAID IT</div>
+    <div class="quote-text" contenteditable="true">"The best person to write accounting software is a really good <strong>accountant.</strong> Coding is the easy part. Knowing the domain is the hard part."</div>
+    <div class="quote-attr" contenteditable="true">
+      Speaker Name
+      <span class="role">Title and date</span>
+    </div>
+  </div>
+  <div class="foot">
+    <div class="src" contenteditable="true">Source: where the quote came from</div>
+    <div><span class="pg">3</span></div>
+  </div>
+</div>
+
+<!-- ===================== SAMPLE: TWO-COLUMN COMPARISON ===================== -->
+<div class="slide-label">4, Two columns</div>
+<div class="slide">
+  <div class="strip"><div class="l"></div><div class="c"></div><div class="r"></div></div>
+  <div class="body-wrap">
+    <h1 class="headline" contenteditable="true">A vs. <strong>B.</strong></h1>
+    <div class="subtitle" contenteditable="true">The framing of the comparison goes here.</div>
+
+    <div class="two-col">
+      <div class="col">
+        <div class="tag" contenteditable="true">Option A</div>
+        <p contenteditable="true" style="font-family: 'Roboto Slab', serif; font-size: 22px; line-height: 1.3; color: var(--ink);">The case for A. Be specific. Use a number if you have one.</p>
+      </div>
+      <div class="col accent">
+        <div class="tag" contenteditable="true">Option B</div>
+        <p contenteditable="true" style="font-family: 'Roboto Slab', serif; font-size: 22px; line-height: 1.3; color: var(--ink);">The case for B. The accent column gets the coral top border to signal it's the recommended one.</p>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div class="src" contenteditable="true"></div>
+    <div><span class="pg">4</span></div>
+  </div>
+</div>
+
+<!-- ===================== SAMPLE: CLOSING ===================== -->
+<div class="slide-label">5, Goal / closing</div>
+<div class="slide">
+  <div class="strip"><div class="l"></div><div class="c"></div><div class="r"></div></div>
+  <div class="goal-wrap">
+    <div class="goal-eyebrow" contenteditable="true">THE TAKEAWAY</div>
+    <h1 class="goal-headline" contenteditable="true">One sentence. The thing you want them to remember. <strong>Emphasis on the verb.</strong></h1>
+  </div>
+  <div class="foot"><div class="src"></div><div><span class="pg">5</span></div></div>
+</div>
+
+<!-- Live editor (optional). Drag, resize, click-to-edit, Ctrl+Z. -->
+<script>window.SLIDE_EDITOR_KEY = 'benedict-evans-deck:v1';</script>
+<script src="../../../slide-editor.js"></script>
+
+</body>
+</html>

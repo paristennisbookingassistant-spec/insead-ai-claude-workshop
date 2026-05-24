@@ -1,0 +1,75 @@
+{
+  "slug": "benedict-evans",
+  "name": "Benedict Evans",
+  "tagline": "Warm-gray canvas with coral accent and slab serif. Editorial, considered, MBA-friendly. The aesthetic of Benedict Evans's annual decks.",
+  "mood": [
+    "editorial",
+    "considered",
+    "analytical",
+    "warm-modern"
+  ],
+  "occasion": [
+    "strategy memo deck",
+    "case prep summary",
+    "industry analysis",
+    "investor update",
+    "exec briefing",
+    "MBA assignment deliverable",
+    "consulting-style presentation"
+  ],
+  "tone": [
+    "thoughtful",
+    "direct",
+    "high-signal",
+    "professional"
+  ],
+  "formality": "medium-high",
+  "density": "medium",
+  "palette": {
+    "bg": "#f0eee9",
+    "bg_dark": "#0c0c0c",
+    "ink": "#3a3a3a",
+    "ink_soft": "#6d6d6d",
+    "ink_faint": "#a8a8a8",
+    "accent": "#e74c3c",
+    "rule": "#cdcbc4",
+    "description": "warm-gray paper background, near-black ink for body, vivid coral red for accent. One dark-mode variant for chart slides."
+  },
+  "typography": {
+    "display": "Roboto Slab",
+    "body": "Roboto Slab",
+    "ui": "Inter",
+    "weights": {
+      "headline": 400,
+      "headline_emphasis": 500,
+      "body": 400,
+      "body_light": 300,
+      "ui": "500-700"
+    }
+  },
+  "layout": {
+    "viewport": "1280x720",
+    "header_strip": "44px Inter caps, 12px, letter-spacing 0.04em",
+    "footer": "12px Inter, source-left + page-number-right",
+    "body_padding": "78px top, 88px sides, 100px bottom"
+  },
+  "signature_elements": [
+    "Slab-serif headlines, 56px, sentence case, ends with period",
+    "Italic light-weight subtitles, 24px, soft gray",
+    "One coral accent per slide — used for the verb or the number, never the whole headline",
+    "Header strip with section name (left) and section ID (center) in muted Inter caps",
+    "Source citation bottom-left, page number bottom-right",
+    "Optional dark-mode variant (slide-dark class) for chart-heavy slides"
+  ],
+  "good_for": [
+    "Slides that are 80% prose, 20% data — Evans's typical mix",
+    "Decks where you want the audience to read, not scan",
+    "Charts that need annotation and context, not just bars",
+    "Quote slides where one sentence is the entire message"
+  ],
+  "bad_for": [
+    "Vibrant marketing decks (too restrained)",
+    "Pitch decks where you need bold sales energy",
+    "Image-heavy decks where the photos do the talking"
+  ]
+}

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Install Claude Code · INSEAD AI Club</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;500;700&family=Inter:wght@400;500;600;700&family=Menlo&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0eee9;
+    --ink: #2a2a2a;
+    --ink-soft: #555;
+    --ink-faint: #999;
+    --accent: #e74c3c;
+    --rule: #cdcbc4;
+    --good: #2ecc71;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--ink); font-family: 'Roboto Slab', serif; }
+  body { line-height: 1.55; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 56px 32px 120px; }
+
+  header { margin-bottom: 40px; padding-bottom: 28px; border-bottom: 2px solid var(--ink); }
+  .eyebrow {
+    font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent);
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-family: 'Roboto Slab', serif; font-weight: 400;
+    font-size: 48px; line-height: 1.05; letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+  h1 strong { font-weight: 500; color: var(--accent); }
+  .lede {
+    font-family: 'Roboto Slab', serif; font-weight: 300;
+    font-size: 19px; line-height: 1.45; color: var(--ink-soft);
+    max-width: 600px;
+  }
+
+  /* Happy-path "big steps" card */
+  .happy-path {
+    background: #fff; border: 1px solid var(--rule); border-radius: 8px;
+    padding: 28px 32px; margin: 32px 0 24px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+  }
+  .happy-path h2 {
+    border-top: none; padding-top: 0; margin-top: 0;
+  }
+
+  h2 {
+    font-family: 'Roboto Slab', serif; font-weight: 500;
+    font-size: 26px; line-height: 1.2; color: var(--ink);
+    margin: 48px 0 16px;
+    padding-top: 20px; border-top: 1px solid var(--rule);
+  }
+  h2 .num {
+    display: inline-block; width: 32px; height: 32px;
+    background: var(--accent); color: #fff; border-radius: 50%;
+    text-align: center; line-height: 32px; font-size: 15px;
+    font-family: 'Inter', sans-serif; font-weight: 700;
+    margin-right: 12px; vertical-align: 2px;
+  }
+  h3 {
+    font-family: 'Roboto Slab', serif; font-weight: 500;
+    font-size: 18px; margin: 24px 0 10px; color: var(--ink);
+  }
+  p { margin: 0 0 12px; font-size: 16px; }
+  ul, ol { margin: 0 0 16px 24px; }
+  li { margin-bottom: 6px; font-size: 16px; }
+  strong { font-weight: 500; }
+  em { font-style: italic; color: var(--ink-soft); }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent); }
+  a:hover { color: #b8392b; }
+
+  code, .cmd {
+    font-family: 'Menlo', 'Consolas', monospace;
+    background: #2c2c2c; color: #f0eee9;
+    padding: 2px 8px; border-radius: 3px;
+    font-size: 13px;
+  }
+  pre.cmd-block {
+    font-family: 'Menlo', 'Consolas', monospace;
+    background: #2c2c2c; color: #f0eee9;
+    padding: 12px 16px; border-radius: 6px;
+    font-size: 13px; line-height: 1.55;
+    overflow-x: auto;
+    margin: 10px 0 14px;
+  }
+
+  /* Big buttons */
+  .btn-row {
+    display: flex; gap: 14px; flex-wrap: wrap;
+    margin: 18px 0 8px;
+  }
+  .btn {
+    display: inline-block;
+    background: var(--accent); color: #fff;
+    padding: 12px 22px; border-radius: 6px;
+    font-family: 'Inter', sans-serif; font-weight: 600; font-size: 15px;
+    text-decoration: none; border: none;
+    box-shadow: 0 2px 8px rgba(231,76,60,0.25);
+  }
+  .btn:hover { background: #c4392b; color: #fff; }
+  .btn.secondary {
+    background: transparent; color: var(--ink);
+    border: 1.5px solid var(--ink); box-shadow: none;
+  }
+  .btn.secondary:hover { background: var(--ink); color: #fff; }
+
+  /* Boxes */
+  .box {
+    background: rgba(0,0,0,0.03); border-left: 3px solid var(--ink-soft);
+    padding: 14px 18px; margin: 14px 0; border-radius: 0 4px 4px 0;
+    font-size: 15px;
+  }
+  .box.tip { border-left-color: var(--accent); background: rgba(231,76,60,0.05); }
+  .box h4 {
+    font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .box.tip h4 { color: var(--accent); }
+  .box p:last-child { margin-bottom: 0; }
+
+  /* Collapsible explanations */
+  details {
+    margin: 10px 0;
+    border: 1px solid var(--rule); border-radius: 5px;
+    background: rgba(255,255,255,0.4);
+  }
+  details summary {
+    padding: 10px 16px; cursor: pointer;
+    font-family: 'Inter', sans-serif; font-weight: 500; font-size: 13px;
+    color: var(--ink-soft); list-style: none;
+  }
+  details summary::-webkit-details-marker { display: none; }
+  details summary::before {
+    content: "▸ "; color: var(--accent); margin-right: 4px;
+  }
+  details[open] summary::before { content: "▾ "; }
+  details[open] summary { color: var(--ink); font-weight: 600; }
+  details > div { padding: 0 16px 14px; font-size: 14px; }
+  details > div p { font-size: 14px; }
+  details > div ul { margin: 6px 0 8px 20px; }
+
+  .check {
+    background: rgba(46,204,113,0.08);
+    border-left: 3px solid var(--good);
+    padding: 12px 16px; margin: 14px 0;
+    border-radius: 0 4px 4px 0;
+  }
+  .check h4 { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--good);
+    margin-bottom: 6px; }
+
+  footer {
+    margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--rule);
+    font-size: 14px; color: var(--ink-faint);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">INSEAD AI Club · Event 03</div>
+  <h1>Install <strong>Claude Code</strong> in ~10 minutes.</h1>
+  <p class="lede">No prior coding experience needed. Two downloads, one click in the Extensions panel. That's it.</p>
+</header>
+
+<div class="box">
+  <h4>Before you start</h4>
+  <p>You need:</p>
+  <ul>
+    <li>A laptop (Mac or Windows). Both work.</li>
+    <li>Admin rights to install software. (Personal laptop recommended — work laptops with IT restrictions may block this.)</li>
+    <li>A Claude account. <a href="https://claude.ai" target="_blank">claude.ai</a> — Free tier works to start; Pro ($20/month) recommended if you'll keep using it.</li>
+    <li>About 10 minutes.</li>
+  </ul>
+</div>
+
+<div class="box tip">
+  <h4>One thing worth knowing</h4>
+  <p>Installing the <strong>VS Code extension</strong> automatically gives you Claude Code in two ways: the <strong>graphical chat panel</strong> inside VS Code <em>and</em> the <strong>`claude` command</strong> in any terminal. You don't have to choose. The extension is the easiest way to get both at once.</p>
+</div>
+
+<!-- ============ HAPPY PATH ============ -->
+<div class="happy-path">
+  <h2 style="margin-bottom: 10px; font-size: 24px;">The happy path</h2>
+  <p style="color: var(--ink-soft); margin-bottom: 18px;">Three steps. About 10 minutes. No terminal commands.</p>
+
+  <ol style="margin-left: 0; list-style: none; padding: 0;">
+    <li style="display: grid; grid-template-columns: 32px 1fr; gap: 12px; margin-bottom: 18px;">
+      <div style="background: var(--accent); color: #fff; border-radius: 50%; width: 28px; height: 28px; text-align: center; line-height: 28px; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 14px;">1</div>
+      <div><strong>Download &amp; install VS Code</strong> from <a href="https://code.visualstudio.com/download" target="_blank">code.visualstudio.com/download</a>. Click Next through the installer.</div>
+    </li>
+    <li style="display: grid; grid-template-columns: 32px 1fr; gap: 12px; margin-bottom: 18px;">
+      <div style="background: var(--accent); color: #fff; border-radius: 50%; width: 28px; height: 28px; text-align: center; line-height: 28px; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 14px;">2</div>
+      <div><strong>Open VS Code → Extensions panel → search "Claude Code" → click Install.</strong> The extension is published by Anthropic.</div>
+    </li>
+    <li style="display: grid; grid-template-columns: 32px 1fr; gap: 12px;">
+      <div style="background: var(--accent); color: #fff; border-radius: 50%; width: 28px; height: 28px; text-align: center; line-height: 28px; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 14px;">3</div>
+      <div><strong>Sign in with your Claude account when prompted.</strong> A Claude icon appears in your left sidebar. Click it to start chatting.</div>
+    </li>
+  </ol>
+
+  <div class="btn-row" style="margin-top: 22px;">
+    <a class="btn" href="https://code.visualstudio.com/download" target="_blank">Download VS Code</a>
+    <a class="btn secondary" href="#detailed">Detailed walkthrough ↓</a>
+  </div>
+</div>
+
+<div class="check">
+  <h4>✓ You're done when</h4>
+  <p>You see the Claude icon in VS Code's left sidebar. You click it. A chat panel opens on the right. You can type a question and Claude responds. That's it — you're ready for Tuesday.</p>
+</div>
+
+<!-- ============ DETAILED WALKTHROUGH ============ -->
+<h2 id="detailed"><span class="num">1</span>Install VS Code</h2>
+
+<p>VS Code is a free code editor made by Microsoft. It's the most popular editor for working with Claude Code because the Claude extension installs straight into it, gives you a chat panel on the side, and lets you see files Claude creates in the file browser.</p>
+
+<details>
+  <summary>What's VS Code in plain English?</summary>
+  <div>
+    <p>Think of it like Microsoft Word, but for code instead of documents. You'll mostly use it to open the Claude chat panel and click around. You don't need to "learn" VS Code.</p>
+  </div>
+</details>
+
+<h3>Install steps</h3>
+<ol>
+  <li>Go to <a href="https://code.visualstudio.com/download" target="_blank">code.visualstudio.com/download</a>.</li>
+  <li>Click the big blue button for your laptop type (Mac or Windows). An installer downloads.</li>
+  <li>Open the file from your Downloads folder. Click Next through the installer.
+    <ul>
+      <li><strong>Windows:</strong> when you see checkboxes, leave the defaults. Make sure <strong>"Add to PATH"</strong> stays checked.</li>
+      <li><strong>Mac:</strong> drag the VS Code icon into Applications when prompted. Mac may warn it's from the internet — click Open.</li>
+    </ul>
+  </li>
+  <li>Launch VS Code. You see a welcome page.</li>
+</ol>
+
+<div class="box">
+  <h4>Minimum version</h4>
+  <p>The Claude extension needs <strong>VS Code 1.98 or higher</strong>. Anything you download from the link above this week will be fine. If you already have an older VS Code, update it through <strong>Help → Check for Updates</strong>.</p>
+</div>
+
+<div class="check">
+  <h4>✓ Check</h4>
+  <p>VS Code is open. You see the welcome page with "Get Started" tabs. The window background is dark blue or grey.</p>
+</div>
+
+<!-- ============ STEP 2 — CLAUDE EXTENSION ============ -->
+<h2><span class="num">2</span>Install the Claude Code extension</h2>
+
+<p>This is the part that does the heavy lifting. The extension installs Claude Code, the official VS Code integration, in one click. No terminal commands.</p>
+
+<h3>Install steps</h3>
+<ol>
+  <li>In VS Code, look at the left sidebar — there's a column of icons. Click the <strong>four-squares icon</strong> labeled <strong>Extensions</strong>. (Or press <code>Cmd+Shift+X</code> on Mac, <code>Ctrl+Shift+X</code> on Windows.)</li>
+  <li>A search box appears at the top of the Extensions panel. Type: <strong>Claude Code</strong></li>
+  <li>The first result should be <strong>Claude Code by Anthropic</strong>. Click it.</li>
+  <li>Click the blue <strong>Install</strong> button.</li>
+  <li>Wait ~30 seconds. The button changes to <strong>Uninstall</strong> when done. You may see a small notification popup at the bottom right.</li>
+</ol>
+
+<details>
+  <summary>I don't see "Claude Code by Anthropic" in the results</summary>
+  <div>
+    <p>Make sure you're spelling it as two words with a space. There are other extensions called "Claude" or "Claude Sonnet" — the official one is specifically <strong>Claude Code</strong> and the publisher is <strong>Anthropic</strong>.</p>
+    <p>If you really can't find it, the extension page is at <a href="https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code" target="_blank">marketplace.visualstudio.com/items?itemName=anthropic.claude-code</a> — open that link in your browser and click "Install" there; it'll launch VS Code and install the extension.</p>
+  </div>
+</details>
+
+<div class="check">
+  <h4>✓ Check</h4>
+  <p>A small Claude icon (a stylized "C" or sunburst) appears in the left sidebar of VS Code, below the Extensions icon.</p>
+</div>
+
+<!-- ============ STEP 3 — SIGN IN ============ -->
+<h2><span class="num">3</span>Sign in to your Claude account</h2>
+
+<p>Click the Claude icon in the left sidebar. A panel opens on the right. It asks you to sign in.</p>
+
+<ol>
+  <li>Click <strong>Sign in</strong>. A browser tab opens.</li>
+  <li>Log in with your Claude account (same one you use for claude.ai).</li>
+  <li>The browser confirms login. Switch back to VS Code.</li>
+  <li>You see a welcome message and a chat input box.</li>
+</ol>
+
+<div class="check">
+  <h4>✓ You're done</h4>
+  <p>Type something into the chat box, like <em>"what can you do?"</em>, and press Enter. Claude responds. You're ready for Tuesday.</p>
+</div>
+
+<!-- ============ OPTIONAL EXTRAS ============ -->
+<h2><span class="num">+</span>Optional: extras worth setting up</h2>
+
+<h3>Create your global CLAUDE.md</h3>
+<p>Claude reads this file at the start of every session, in every project. It's where you teach Claude your preferences once so you never have to repeat yourself.</p>
+
+<ol>
+  <li>Download <a href="starter-files/CLAUDE-md-starter.md">starter-files/CLAUDE-md-starter.md</a> from this repo.</li>
+  <li>Open it. Fill in the parts in <code>&lt;angle brackets&gt;</code>.</li>
+  <li>Save it as <code>CLAUDE.md</code> in the <code>.claude</code> folder in your home directory:
+    <ul>
+      <li>Mac: <code>~/.claude/CLAUDE.md</code></li>
+      <li>Windows: <code>C:\Users\&lt;you&gt;\.claude\CLAUDE.md</code></li>
+    </ul>
+  </li>
+</ol>
+
+<p>If the <code>.claude</code> folder doesn't exist yet, the first time you use Claude Code creates it automatically. You can also just ask Claude in the chat panel: <em>"Help me create my global CLAUDE.md file."</em> — Claude will guide you through it.</p>
+
+<details>
+  <summary>I'd rather use the terminal version of Claude Code</summary>
+  <div>
+    <p><strong>You don't need this if you installed the VS Code extension above</strong> — the extension automatically installs the <code>claude</code> command too. Just open the terminal (in VS Code: <code>Cmd/Ctrl+`</code>) and type <code>claude</code>.</p>
+    <p>If you want to skip VS Code entirely and only use the terminal version, use the official native install:</p>
+    <p><strong>Mac / Linux / WSL:</strong></p>
+    <pre class="cmd-block">curl -fsSL https://claude.ai/install.sh | bash</pre>
+    <p><strong>Windows PowerShell:</strong></p>
+    <pre class="cmd-block">irm https://claude.ai/install.ps1 | iex</pre>
+    <p>Then type <code>claude</code> in any terminal. This is the official "native install" recommended by Anthropic. No Node.js needed. Auto-updates in the background.</p>
+  </div>
+</details>
+
+<!-- ============ TROUBLESHOOTING ============ -->
+<h2><span class="num">?</span>Stuck?</h2>
+
+<details>
+  <summary>I can't find the Extensions icon in VS Code</summary>
+  <div>
+    <p>It's on the very far left, in the activity bar. If the activity bar is hidden, press <code>Ctrl+Shift+E</code> (Windows) or <code>Cmd+Shift+E</code> (Mac) — or go to <strong>View → Open View → Extensions</strong> from the top menu.</p>
+  </div>
+</details>
+
+<details>
+  <summary>The Claude extension installed but I don't see the icon</summary>
+  <div>
+    <p>Restart VS Code completely (Quit and reopen, not just close the window). The Claude icon should appear in the left sidebar after the restart.</p>
+    <p>If still missing, look in the <strong>View → Command Palette</strong> menu (<code>Cmd/Ctrl+Shift+P</code>), type "Claude", and select <strong>Claude Code: Open in New Tab</strong>. This forces the extension to load.</p>
+  </div>
+</details>
+
+<details>
+  <summary>Sign-in keeps failing / the browser doesn't open</summary>
+  <div>
+    <p>Try these in order:</p>
+    <ol>
+      <li>Restart VS Code.</li>
+      <li>Make sure you're logged into <a href="https://claude.ai" target="_blank">claude.ai</a> in your default browser first, then try again.</li>
+      <li>If you're on a corporate or school network, try a different network (your phone hotspot is a quick test). Some networks block the OAuth callback.</li>
+    </ol>
+  </div>
+</details>
+
+<details>
+  <summary>I really can't get the install to work and the workshop is tonight</summary>
+  <div>
+    <p>Come 15 minutes early to Amphi 105. Liyang will help you finish setup before the workshop starts.</p>
+    <p>If you can't come early, pair with someone in the room and follow along on their screen. You'll still get most of the value, and you can finish setup the next day.</p>
+  </div>
+</details>
+
+<footer>
+  <p>Built for INSEAD AI Club Event 03 · May 2026 · Liyang Guo (MBA26D)</p>
+  <p>Install instructions verified against <a href="https://code.claude.com/docs/en/overview" target="_blank">code.claude.com/docs</a>.</p>
+</footer>
+
+</div>
+</body>
+</html>
